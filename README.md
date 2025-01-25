@@ -15,9 +15,9 @@ Management is concerned about potential misuse of PowerShell to execute maliciou
 
 ### High-Level PowerShell Discovery Plan
 
-- **Check `DeviceFileEvents`** any new or suspicious file creations in temporary directories (e.g., `C:\Windows\Temp\FakeMalware`).
 - **Check `DeviceProcessEvents`** for PowerShell processes executed in a suspicious manner (e.g., via`cmd.exe`, `rundll32.exe`).
 - **Check `DeviceNetworkEvents`** for any network activity involving suspicious external requests (e.g., file download attempts using `Invoke-WebRequest`).
+- **Check `DeviceFileEvents`** any new or suspicious file creations in temporary directories (e.g., `C:\Windows\Temp\FakeMalware`).
 - **Check `DeviceRegistryEvents`** for unusual changes, particularly in execution policies or PowerShell-related settings.
 - **Check `DeviceLogonEvents`** for any unauthorized user logins coinciding with suspicious PowerShell activity.
 
@@ -25,9 +25,9 @@ Management is concerned about potential misuse of PowerShell to execute maliciou
 
 ## Steps Taken
 
-### 1. Searched the `DeviceFileEvents` Table
+### 1. Searched the `DeviceProcessEvents` Table
 
-Searched for any file that had the string "tor", ".exe", ".txt", or ".json" in it. 
+Searched for any process that had "cmd.exe", "rundll32.exe", "powershell_ise.exe" or "powershell.exe" in the command line. 
 
 At 3:39:26 PM on January 20, 2025, the user "labuser" created a file named "tor.exe" on the device "hardmodevm." The file was saved in the folder path: C:\Users\labuser\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe. The file's SHA256 hash is c3b431779278278cda8d2bf5de5d4da38025717630bfeae1a82c927d0703cd28.	
 
@@ -37,15 +37,13 @@ The search yielded other items including the creation of a folder (tor-shopping-
 **Query used to locate events:**
 
 ```kql
-DeviceFileEvents
+DeviceProcessEvents
+| where ProcessCommandLine has_any ("cmd.exe", "rundll32.exe", "powershell_ise.exe", "powershell.exe")
 | where DeviceName == "hardmodevm"
-| where FileName contains (“tor”, “.txt” , “.exe” , “.json”)
-| where InitiatingProcessAccountName == "labuser"
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
 | order by Timestamp desc
-| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName
 ```
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/6f212b1a-e4f5-40dc-be67-2a0e4bd44c62">
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/db49fe7f-ee5b-468a-bf32-a0affe7b282d">
+<img width="1212" alt="image" src="https://github.com/user-attachments/assets/e5e5fee9-fa90-403b-aed5-4553926bf119">
 
 ---
 
