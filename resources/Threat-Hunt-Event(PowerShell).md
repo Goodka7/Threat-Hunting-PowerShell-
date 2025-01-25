@@ -13,23 +13,30 @@
 ---
 
 ## Tables Used to Detect IoCs:
+
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceProcessEvents                                                            |
 | **Info**| https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceprocessevents-table |
-| **Purpose**| Used to detect execution of suspicious PowerShell commands (e.g., `powershell.exe -encodedCommand`). |
+| **Purpose**| Used to detect PowerShell processes executed in a suspicious manner (e.g., via `cmd.exe`, `rundll32.exe`, or with flags like `-EncodedCommand` or `-ExecutionPolicy Bypass`). |
 
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceNetworkEvents                                                           |
 | **Info**| https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicenetworkevents-table |
-| **Purpose**| Used to detect suspicious network activity, including communication with external servers that may host malicious payloads. |
+| **Purpose**| Used to detect network activity involving suspicious external requests (e.g., file download attempts using `Invoke-WebRequest` or connections to potentially malicious servers). |
 
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceFileEvents                                                              |
 | **Info**| https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicefileevents-table |
-| **Purpose**| Used to detect file activity, such as the creation and deletion of files associated with the attack (e.g., payload.exe). |
+| **Purpose**| Used to detect new or suspicious file creations in temporary directories (e.g., `C:\Windows\Temp\FakeMalware`) or files associated with PowerShell activity. |
+
+| **Parameter**       | **Description**                                                              |
+|---------------------|------------------------------------------------------------------------------|
+| **Name**| DeviceRegistryEvents                                                            |
+| **Info**| https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceregistryevents-table |
+| **Purpose**| Used to detect unusual registry changes, particularly in execution policies or PowerShell-related settings that may indicate security feature bypasses. |
 
 ---
 
