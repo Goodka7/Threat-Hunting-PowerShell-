@@ -29,9 +29,7 @@ Management is concerned about potential misuse of PowerShell to execute maliciou
 
 Searched for any process that had "cmd.exe", "rundll32.exe", "powershell_ise.exe" or "powershell.exe" in the command line. 
 
-At 3:39:26 PM on January 20, 2025, the user "labuser" created a file named "tor.exe" on the device "hardmodevm." The file was saved in the folder path: C:\Users\labuser\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe. The file's SHA256 hash is c3b431779278278cda8d2bf5de5d4da38025717630bfeae1a82c927d0703cd28.	
-
-The search yielded other items including the creation of a folder (tor-shopping-list) which held several artifacts of interest: several .txt files and a few .jsons, with names that suggest illicit activity.
+The dataset reveals 88 records of process activity on the VM hardmodevm, predominantly involving powershell.exe (47 instances) and cmd.exe (22 instances as initiating processes). Frequent use of PowerShell commands includes flags like -NoProfile, -NonInteractive, and -ExecutionPolicy Bypass, often triggered via cmd.exe or gc_worker.exe, suggesting possible script automation or suspicious activity. Initiating processes such as WindowsAzureGuestAgent.exe and timestamps concentrated on Jan 25, 2025, further indicate repeated execution patterns. These observations suggest potentially unauthorized or automated operations warranting deeper investigation.
 
 
 **Query used to locate events:**
@@ -47,26 +45,24 @@ DeviceProcessEvents
 
 ---
 
-### 2. Searched the `DeviceProcessEvents` Table
+### 2. Searched the `DeviceNetworkEvents` Table
 
-Searched for any `ProcessCommandLine` that contained the string "tor-browser-windows-x86_64-portable-14.0.4.exe". 
+Searched for any connections that contained the commands "Invoke-WebRequest", "-Uri" and "http". 
 
-At 3:30:55 PM on January 20, 2025, the user "labuser" created a process called "cmd.exe" on the device "hardmodevm." The process was located in C:\Windows\System32\cmd.exe, with the SHA256 hash of badf4752413cb0cbdc03fb95820ca167f0cdc63b597ccdb5ef43111180e088b0. 
-
-The command executed was:<span style="color: green;">
-"cmd.exe" /c powershell.exe -ExecutionPolicy Bypass -Command "Start-Process \"C:\Downloads\tor-browser-windows-x86_64-portable-14.0.4.exe\" -ArgumentList '/S' -NoNewWindow -Wait"</span>, which initiated the installation of the Tor Browser, silently.
+The dataset reveals network activity originating from hardmodevm, with notable connections initiated by powershell.exe using commands that include -ExecutionPolicy Bypass. External requests were made to URLs such as raw.githubusercontent.com, associated with IP addresses 185.199.108.133 and 185.199.111.133, both of which are commonly used to host scripts or files. These connections occurred over HTTPS (port 443) and were marked as successful (ConnectionSuccess). The combination of PowerShell usage with potentially suspicious URLs highlights activity that may involve downloading or executing external scripts, warranting further investigation.
 
 **Query used to locate event:**
 
 ```kql
-
-DeviceProcessEvents
-| where DeviceName  == "hardmodevm"
-| where ProcessCommandLine contains "tor-browser-windows-x86_64-portable-14.0.4.exe"
+DeviceNetworkEvents
+| where DeviceName == "hardmodevm"
+| where InitiatingProcessCommandLine contains "Invoke-WebRequest"
+      or InitiatingProcessCommandLine contains "-Uri"
+      or RemoteUrl has "http"
+| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, RemoteUrl, RemoteIP, RemotePort, ActionType
 | order by Timestamp desc
-| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName, Command = ProcessCommandLine
 ```
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/a610791a-0559-410d-881d-397251039bbf">
+<img width="1212" alt="image" src="https://github.com/user-attachments/assets/926684fe-1507-4af8-abc5-3c8d466f3de2">
 
 ---
 
