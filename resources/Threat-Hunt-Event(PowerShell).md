@@ -2,7 +2,7 @@
 **Suspicious PowerShell Script Execution**
 
 ## Steps the "Bad Actor" Took Create Logs and IoCs:
-1. Launch PowerShell in a suspicious manner (e.g., via `wininit.exe`, `cmd.exe`, or another indirect method).
+1. Launch PowerShell in a suspicious manner (e.g., via `cmd.exe`, or another indirect method).
 2. Execute encoded commands using `-encodedCommand` or download malicious scripts from external sources.
    - Example command: `powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand <Base64EncodedPayload>`
 3. Download malicious payload from a remote server using `Invoke-WebRequest` or `Invoke-Expression`.
