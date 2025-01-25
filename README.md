@@ -19,8 +19,6 @@ Management is concerned about potential misuse of PowerShell to execute maliciou
 - **Check `DeviceNetworkEvents`** for any network activity involving suspicious external requests (e.g., file download attempts using `Invoke-WebRequest`).
 - **Check `DeviceFileEvents`** any new or suspicious file creations in temporary directories (e.g., `C:\Windows\Temp\FakeMalware`).
 - **Check `DeviceRegistryEvents`** for unusual changes, particularly in execution policies or PowerShell-related settings.
-- **Check `DeviceProcessEvents`** for unusual parent-child relationships (e.g., cmd.exe spawning powershell.exe).
-- **Check `DeviceProcessEvents`** for PowerShell processes indicating privilege escalation or lateral movement 
 ---
 
 ## Steps Taken
@@ -83,30 +81,6 @@ DeviceFileEvents
 | order by Timestamp desc
 ```
 <img width="1212" alt="image" src="https://github.com/user-attachments/assets/fc3c072b-e1e1-43c7-862c-6dce9f305d5c">
-
----
-
-### 4. Searched the `DeviceRegistryEvents` Table
-
-Searched for unusual changes, particularly in execution policies or PowerShell-related settings.
-
-The data highlights changes on hardmodevm involving keys related to both PowerShell and general system configurations. Notably, registry keys such as HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemCertificates and HKEY_CURRENT_USER\S-1-5-21...WindowsPowerShell\v1.0\powershell.exe were altered, with actions including RegistryValueSet and RegistryKeyCreated. These changes were initiated by processes like svchost.exe and explorer.exe. 
-
-While no direct link to altered execution policies was found, the involvement of PowerShell-related keys and potentially suspicious value modifications like Microsoft Corporation suggests configuration changes that might impact system behavior. These events warrant further review to determine their relationship with recent payload execution and possible security implications.
-
-**Query used to locate events:**
-
-```kql
-DeviceRegistryEvents
-| where DeviceName == "hardmodevm"
-| where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryKeyDeleted")
-| where RegistryKey contains "PowerShell" 
-      or RegistryKey contains "Microsoft"
-      or RegistryKey contains "Policies"
-| project Timestamp, DeviceName, RegistryKey, RegistryValueName, RegistryValueType, RegistryValueData, ActionType, InitiatingProcessFileName, InitiatingProcessCommandLine
-| order by Timestamp desc
-```
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/fbce844e-8ebd-40ad-96e0-49d0ddae1ce8">
 
 ---
 
