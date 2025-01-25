@@ -157,12 +157,12 @@ DeviceRegistryEvents
 
 ## Summary
 
-The user "labuser" on the device "hardmodevm" installed and used the Tor Browser, taking actions that raised concerns. First, "labuser" silently initiated the installation of the Tor Browser through a PowerShell command. After the installation, they created the "tor.exe" file and executed it, which started the Tor service with specific configurations. Additionally, multiple instances of "firefox.exe" associated with the Tor Browser were launched, and the user successfully connected to the Tor network, accessing a remote IP and URL, suggesting the use of Tor for anonymous browsing. Furthermore, a folder (tor-shopping-list) containing several .txt and .json files was created, holding several files with names indicating potential illicit activity. These actions suggest that the user may have been engaging in suspicious or unauthorized activities using the Tor network.
+The user "labuser" on the device "hardmodevm" executed multiple suspicious PowerShell commands and created temporary files, raising concerns about potential misuse. First, "labuser" initiated the execution of a PowerShell script (`payload.ps1`) with the `-ExecutionPolicy Bypass` flag, bypassing standard security measures. During the execution, temporary script files such as `__PSScriptPolicyTest_bdps4qml.1vq.ps1` and `__PSScriptPolicyTest_xp01hqvv.wby.ps1` were created in the `C:\Windows\Temp` directory. These files indicate automated or obfuscated script activity. Additionally, encoded commands were executed through `powershell.exe`, initiated by `gc_worker.exe`, further suggesting the use of obfuscation techniques to conceal activity. The involvement of elevated accounts like "system" in conjunction with these processes raises further suspicion of privilege escalation or unauthorized operations. The combination of these actions points to potential malicious activity, such as script-based attacks or the disabling of security features, and warrants immediate investigation.
 
 ---
 
 ## Response Taken
 
-TOR usage was confirmed on the endpoint `hardmodevm` by the user `labuser`. The device was isolated, and the user's direct manager was notified.
+Suspicious PowerShell activity was confirmed on the endpoint `hardmodevm` by the user `labuser`. The device was immediately isolated to prevent further potential misuse, and the user's direct manager was notified for follow-up investigation and potential disciplinary action.
 
 ---
