@@ -1,4 +1,4 @@
-<img width="400" src="https://github.com/user-attachments/assets/55a979ee-ed36-45a9-a6ad-156b6cfe2479"/>
+<img width="400" src="https://github.com/user-attachments/assets/9c09c98f-0e0f-40f4-a921-696b5fd7e44e" alt="Red PowerShell logo"/>
 
 # Threat Hunt Report: Suspicious PowerShell Activity
 - [Scenario Creation](https://github.com/Goodka7/Threat-Hunting/blob/main/resources/Threat_Hunt_Event(TOR%20Usage).md)
