@@ -86,24 +86,27 @@ DeviceFileEvents
 
 ---
 
-### 4. Searched the `DeviceNetworkEvents` Table for TOR Network Connections
+### 4. Searched the `DeviceRegistryEvents` Table
 
-Searched for any indication the TOR browser was used to establish a connection using any of the known TOR ports. The results showed user “labuser” did indeed use tor to connect to an url.
+Searched for unusual changes, particularly in execution policies or PowerShell-related settings.
 
-At 3:43:03 PM on January 20, 2025, a successful connection was made by the user "labuser" from the device "hardmodevm" to the remote IP address 45.21.116.144 on port 9001. The connection was made using the file "tor.exe," and the remote URL accessed was https://www.35yt53tip6fr4hoov4a.com.
+The data highlights changes on hardmodevm involving keys related to both PowerShell and general system configurations. Notably, registry keys such as HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemCertificates and HKEY_CURRENT_USER\S-1-5-21...WindowsPowerShell\v1.0\powershell.exe were altered, with actions including RegistryValueSet and RegistryKeyCreated. These changes were initiated by processes like svchost.exe and explorer.exe. 
 
+While no direct link to altered execution policies was found, the involvement of PowerShell-related keys and potentially suspicious value modifications like Microsoft Corporation suggests configuration changes that might impact system behavior. These events warrant further review to determine their relationship with recent payload execution and possible security implications.
 
 **Query used to locate events:**
 
 ```kql
-DeviceNetworkEvents
-| where DeviceName  == "hardmodevm"
-| where InitiatingProcessAccountName == "labuser"
-| where RemotePort in ("9001", "9030", "9040", "9050", "9051", "9150", "80", "443")  
-| project Timestamp, DeviceName, InitiatingProcessAccountName, ActionType, RemoteIP, RemotePort, RemoteUrl, InitiatingProcessFileName, InitiatingProcessFolderPath  
+DeviceRegistryEvents
+| where DeviceName == "hardmodevm"
+| where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryKeyDeleted")
+| where RegistryKey contains "PowerShell" 
+      or RegistryKey contains "Microsoft"
+      or RegistryKey contains "Policies"
+| project Timestamp, DeviceName, RegistryKey, RegistryValueName, RegistryValueType, RegistryValueData, ActionType, InitiatingProcessFileName, InitiatingProcessCommandLine
 | order by Timestamp desc
 ```
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/f88b30e1-ccca-4a3a-b601-65992d08f1d3">
+<img width="1212" alt="image" src="https://github.com/user-attachments/assets/fbce844e-8ebd-40ad-96e0-49d0ddae1ce8">
 
 ---
 
