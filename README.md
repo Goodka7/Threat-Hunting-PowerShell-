@@ -11,13 +11,15 @@
 
 ##  Scenario
 
-Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
+Management is concerned about potential misuse of PowerShell to execute malicious commands or disable security features. Recent security logs indicate irregular PowerShell execution patterns, including encoded commands and the disabling of security tools. The goal is to detect suspicious PowerShell usage, such as obfuscated scripts or unauthorized execution of system commands, and analyze any related security incidents. If any suspicious activity is identified, notify management for further investigation.
 
-### High-Level TOR-Related IoC Discovery Plan
+### High-Level PowerShell Discovery Plan
 
-- **Check `DeviceFileEvents`** for any `tor(.exe)` or `firefox(.exe)` file events.
-- **Check `DeviceProcessEvents`** for any signs of installation or usage.
-- **Check `DeviceNetworkEvents`** for any signs of outgoing connections over known TOR ports.
+- **Check `DeviceFileEvents`** any new or suspicious file creations in temporary directories (e.g., `C:\Windows\Temp\FakeMalware`).
+- **Check `DeviceProcessEvents`** for PowerShell processes executed in a suspicious manner (e.g., via`cmd.exe`, `rundll32.exe`).
+- **Check `DeviceNetworkEvents`** for any network activity involving suspicious external requests (e.g., file download attempts using `Invoke-WebRequest`).
+- **Check `DeviceRegistryEvents`** for unusual changes, particularly in execution policies or PowerShell-related settings.
+- **Check `DeviceLogonEvents`** for any unauthorized user logins coinciding with suspicious PowerShell activity.
 
 ---
 
