@@ -108,50 +108,50 @@ DeviceRegistryEvents
 
 ---
 
-## Chronological Event Timeline 
+## Chronological Event Timeline
 
-### 1. File Download - TOR Installer
+### 1. Process Execution - PowerShell Script Execution
 
-- **Time:** `3:29:50 PM, January 20, 2025`
-- **Event:** The user "employee" downloaded a file named `tor-browser-windows-x86_64-portable-14.0.4.exe` to the Downloads folder.
-- **Action:** File download detected.
-- **File Path:** `C:\Users\labuser\Downloads\tor-browser-windows-x86_64-portable-14.0.4.exe`
-
-### 2. Process Execution - TOR Browser Installation
-
-- **Time:** `3:30:55 PM, January 20, 2025`
-- **Event:** The user "labuser" executed the file `tor-browser-windows-x86_64-portable-14.0.4.exe` in silent mode, initiating a background installation of the TOR Browser.
+- **Time:** `2:08:23 PM, January 25, 2025`
+- **Event:** The user "system" executed `payload.ps1` via `powershell.exe` with the `-ExecutionPolicy Bypass` flag, indicating a bypass of default execution policies.
 - **Action:** Process creation detected.
-- **Command:** `cmd.exe /c powershell.exe -ExecutionPolicy Bypass -Command "Start-Process \"C:\Downloads\tor-browser-windows-x86_64-portable-14.0.4.exe\" -ArgumentList '/S' -NoNewWindow -Wait".`
-- **File Path:** `C:\Users\labuser\Downloads\tor-browser-windows-x86_64-portable-14.0.1.exe`
+- **Command:** `"powershell.exe" -ExecutionPolicy Bypass -File "C:\Users\labuser\AppData\Local\Temp\payload.ps1"`
+- **Initiating Process:** `"cmd.exe" /c powershell.exe -ExecutionPolicy Bypass -File "C:\Users\labuser\AppData\Local\Temp\payload.ps1"`
+- **File Path:** `C:\Users\labuser\AppData\Local\Temp\payload.ps1`
 
-### 3. Process Execution - TOR Browser Launch
+### 2. File Creation - Temporary Script
 
-- **Time:** `3:42:26 PM to 3:42:49 PM, January 20, 2025`
-- **Event:** User "employee" opened the TOR browser. Subsequent processes associated with TOR browser, such as `firefox.exe` and `tor.exe`, were also created, indicating that the browser launched successfully.
-- **Action:** Process creation of TOR browser-related executables detected.
-- **File Path:** `C:\Users\labuser\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe`
-
-### 4. Network Connection - TOR Network
-
-- **Time:** `3:43:03 PM, January 20, 2025`
-- **Event:** A network connection to IP `45.21.116.144` on port `9001` by user "labuser" was established using `tor.exe`, confirming TOR browser network activity.
-- **Action:** Connection success.
-- **Process:** `tor.exe`
-- **File Path:** `c:\users\labuser\desktop\tor browser\browser\torbrowser\tor\tor.exe`
-
-### 5. Additional Network Connections - TOR Browser Activity
-
-- **Time:** `3:43:36 PM, January 20, 2025` - Local connection to `127.0.0.1` on port `9150`.
-- **Event:** Additional TOR network connections were established, indicating ongoing activity by user "employee" through the TOR browser.
-- **Action:** Multiple successful connections detected.
-
-### 6. File Creation - TOR Shopping List
-
-- **Time:** `3:51 to 3:55 PM, January 20, 2025`
-- **Event:** The user "labuser" created a folder named `tor-shopping-list` on the desktop, and created several files with names that are potentially related to their TOR browser activities.
+- **Time:** `2:11:46 PM, January 25, 2025`
+- **Event:** A temporary PowerShell script was created during execution, named `__PSScriptPolicyTest_bdps4qml.1vq.ps1`.
 - **Action:** File creation detected.
-- **File Path:** `C:\Users\labuser\Desktop\tor-shopping-list`
+- **File Path:** `C:\Users\labuser\AppData\Local\Temp\__PSScriptPolicyTest_bdps4qml.1vq.ps1`
+- **Process Command:** `"powershell.exe" -ExecutionPolicy Bypass -File "C:\Users\labuser\AppData\Local\Temp\payload.ps1"`
+
+### 3. Process Execution - PowerShell with Encoded Command
+
+- **Time:** `2:37:16 PM, January 25, 2025`
+- **Event:** The `powershell.exe` process was executed with a suspicious encoded command by the `system` account.
+- **Action:** Process creation detected.
+- **Command:** `"powershell.exe" -noninteractive -outputFormat None -EncodedCommand "SQB0ACAAIgBHAEwAIgAA"`
+- **Initiating Process:** `"gc_worker.exe" -a WindowsDefenderExploitGuard -b -c`
+- **File Path:** Not applicable.
+
+### 4. File Creation - Temporary PowerShell Script
+
+- **Time:** `2:43:18 PM, January 25, 2025`
+- **Event:** Another temporary script file, `__PSScriptPolicyTest_xp01hqvv.wby.ps1`, was created during PowerShell execution.
+- **Action:** File creation detected.
+- **File Path:** `C:\Users\labuser\AppData\Local\Temp\__PSScriptPolicyTest_xp01hqvv.wby.ps1`
+- **Process Command:** `"powershell.exe" -ExecutionPolicy Bypass -File "C:\Users\labuser\AppData\Local\Temp\payload.ps1"`
+
+### 5. Process Execution - PowerShell via Explorer
+
+- **Time:** `2:43:18 PM, January 25, 2025`
+- **Event:** The `powershell.exe` process was executed by `explorer.exe` with no additional parameters.
+- **Action:** Process creation detected.
+- **Command:** `"PowerShell_ISE.exe"`
+- **Initiating Process:** `"explorer.exe"`
+- **File Path:** Not applicable.
 
 ---
 
